@@ -1,0 +1,24 @@
+eccube:
+  rate_limiter:
+    app_create_request:
+      # 実行するルーティングを指定します。
+      route: plg_customer_2fa_app_create
+      # 実行するmethodを指定します。デフォルトはPOSTです。
+      method: [ 'POST' ]
+      # スロットリングの制御方法を設定します。ip・customerを指定できます。
+      type: [ 'ip', 'customer' ]
+      # 試行回数を設定します。
+      limit: 5
+      # インターバルを設定します。
+      interval: '30 minutes'
+    app_challenge_request:
+      # 実行するルーティングを指定します。
+      route: plg_customer_2fa_app_challenge
+      # 実行するmethodを指定します。デフォルトはPOSTです。
+      method: [ 'POST' ]
+      # スロットリングの制御方法を設定します。ip・customerを指定できます。
+      type: [ 'ip', 'customer' ]
+      # 試行回数を設定します。
+      limit: 5
+      # インターバルを設定します。
+      interval: '30 minutes'
