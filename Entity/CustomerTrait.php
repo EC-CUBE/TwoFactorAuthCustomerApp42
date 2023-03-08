@@ -15,7 +15,7 @@ trait CustomerTrait
      *
      * @ORM\Column(name="two_factor_auth_secret", type="string", length=255, nullable=true)
      */
-    private ?string $two_factor_auth_secret;
+    private ?string $two_factor_auth_secret = null;
 
     /**
      * @return string
