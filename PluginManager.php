@@ -179,7 +179,8 @@ class PluginManager extends AbstractPluginManager
      */
     protected function createConfig(EntityManagerInterface $em)
     {
-        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findBy(['name' => 'APP']);
+        /** @var TwoFactorAuthType $TwoFactorAuthType */
+        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findOneBy(['name' => 'APP']);
         if (!$TwoFactorAuthType) {
             // レコードを保存
             $TwoFactorAuthType = new TwoFactorAuthType();
@@ -188,9 +189,11 @@ class PluginManager extends AbstractPluginManager
                 ->setName('APP')
                 ->setRoute('plg_customer_2fa_app_create')
             ;
-
-            $em->persist($TwoFactorAuthType);
+        } else {
+            // 無効の状態から有効に変更する
+            $TwoFactorAuthType->setIsDisabled(false);
         }
+        $em->persist($TwoFactorAuthType);
 
         // 除外ルートの登録
         $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
@@ -211,14 +214,13 @@ class PluginManager extends AbstractPluginManager
      */
     protected function removeConfig(EntityManagerInterface $em)
     {
-        /** @var TwoFactorAuthConfig[]|null $TwoFactorAuthType */
-        $TwoFactorAuthTypes = $em->getRepository(TwoFactorAuthType::class)->findBy(['name' => 'APP']);
+        /** @var TwoFactorAuthType|null $TwoFactorAuthType */
+        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findOneBy(['name' => 'APP']);
 
-        // APPオプションがあれば、消す
-        if (!empty($TwoFactorAuthTypes)) {
-            foreach ($TwoFactorAuthTypes as $twoFactorAuthType) {
-                $em->remove($twoFactorAuthType);
-            }
+        // APPオプションがあれば、そのオプションを無効にする
+        if (!empty($TwoFactorAuthType)) {
+            $TwoFactorAuthType->setIsDisabled(true);
+            $em->persist($TwoFactorAuthType);
         }
 
         // 除外ルートの削除
