@@ -13,7 +13,7 @@ file that was distributed with this source code.
 {% set body_class = 'mypage' %}
 
 {% block javascript %}
-{% if Customer.two_factor_auth == false or Customer.two_factor_auth_secret == null %}
+{% if Customer.TwoFactorAuthType == null or Customer.two_factor_auth_secret == null %}
 {# TODO: フロント側バンドルにもqrcodeが欲しい #}
 <script src="{{ asset('admin.bundle.js', 'bundle') }}"></script>
 <script>
@@ -49,7 +49,7 @@ file that was distributed with this source code.
         </div>
         <div class="ec-off2Grid">
             <div class="ec-off2Grid__cell">
-                {% if Customer.two_factor_auth == false or Customer.two_factor_auth_secret == null %}
+                {% if Customer.TwoFactorAuthType == false or Customer.two_factor_auth_secret == null %}
                 <form name="form1" id="form1" method="post" action="{{ path('plg_customer_2fa_app_create') }}">
                     {{ form_widget(form._token) }}
                     {{ form_widget(form.auth_key) }}
