@@ -26,7 +26,7 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
      */
     public function create(Request $request) 
     {
-        if ($this->isAuth()) {
+        if ($this->isTwoFactorAuthed()) {
             // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }
@@ -97,7 +97,7 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
      */
     public function challenge(Request $request) 
     {
-        if ($this->isAuth()) {
+        if ($this->isTwoFactorAuthed()) {
             // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }

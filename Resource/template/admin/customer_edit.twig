@@ -16,7 +16,7 @@
 <div class="card rounded border-0 mb-4" id="two_factor_auth_app_setting">
     <div class="card-header">
         <div class="row">
-            <div class="col-8"><span class="card-title">アプリ認証情報</span>
+            <div class="col-8"><span class="card-title">{{ 'admin.customer.2fa.app.title'|trans }}</span>
             </div>
             <div class="col-4 text-end">
                 <a data-bs-toggle="collapse" href="#ordererInfo"
@@ -30,7 +30,7 @@
         <div class="card-body">
             <div class="row mb-2">
                 <div class="col-3">
-                    <span>秘密鍵</span>
+                    <span>{{ 'admin.customer.2fa.app.secret_key'|trans }}</span>
                 </div>
                 <div class="col">
                     {{ form_widget(form.two_factor_auth_secret) }}
