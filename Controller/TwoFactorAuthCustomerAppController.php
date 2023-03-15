@@ -76,7 +76,7 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
                     $this->entityManager->flush();
                     $this->addSuccess('front.2fa.complete_message');
 
-                    $response = new RedirectResponse($this->generateUrl($this->getCallbackRoute()));
+                    $response = $this->redirectToRoute($this->getCallbackRoute());
                     $response->headers->setCookie(
                         $this->customerTwoFactorAuthService->createAuthedCookie(
                             $Customer,
@@ -132,7 +132,7 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 if ($this->verifyCode($Customer->getTwoFactorAuthSecret(), $form->get('one_time_token')->getData())) {
-                    $response = new RedirectResponse($this->generateUrl($this->getCallbackRoute()));
+                    $response = $this->redirectToRoute($this->getCallbackRoute());
                     $response->headers->setCookie(
                         $this->customerTwoFactorAuthService->createAuthedCookie(
                             $Customer,
