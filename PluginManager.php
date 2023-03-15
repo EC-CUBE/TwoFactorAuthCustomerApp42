@@ -197,9 +197,6 @@ class PluginManager extends AbstractPluginManager
 
         // 除外ルートの登録
         $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
-        foreach ($this->pages as $p) {
-            $TwoFactorAuthConfig->addExcludeRoute($p[0]);
-        }
         $em->persist($TwoFactorAuthConfig);
         $em->flush();
 
