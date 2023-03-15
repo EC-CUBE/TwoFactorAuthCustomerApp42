@@ -66,10 +66,10 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
         } elseif ('POST' === $request->getMethod()) {
             $form = $builder->getForm();
             $form->handleRequest($request);
-            $auth_key = $form->get('auth_key')->getData();
-            $token = $form->get('one_time_token')->getData();
             if ($form->isSubmitted() && $form->isValid()) {
-                if ($this->verifyCode($auth_key, $token, 2)) {
+                $auth_key = $form->get('auth_key')->getData();
+                $token = $form->get('one_time_token')->getData();
+                if ($this->verifyCode($auth_key, $token)) {
                     // 秘密鍵更新
                     $Customer->setTwoFactorAuthSecret($auth_key);
                     $this->entityManager->persist($Customer);
