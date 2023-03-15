@@ -8,6 +8,6 @@
   },
   "require": {
     "ec-cube/plugin-installer": "^2.0",
-    "TwoFactorAuthCustomer42": "^1.0"
+    "ec-cube/twofactorauthcustomer42": "*"
   }
 }
