@@ -17,10 +17,9 @@ use Eccube\Entity\Customer;
 use Plugin\TwoFactorAuthCustomer42\Controller\TwoFactorAuthCustomerController;
 use Plugin\TwoFactorAuthCustomerApp42\Form\Type\TwoFactorAuthAppTypeCustomer;
 use RobThree\Auth\TwoFactorAuth;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
 {
