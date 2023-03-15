@@ -18,13 +18,10 @@ use Eccube\Entity\Layout;
 use Eccube\Entity\Page;
 use Eccube\Entity\PageLayout;
 use Eccube\Plugin\AbstractPluginManager;
-use Eccube\Repository\LayoutRepository;
-use Eccube\Repository\PageLayoutRepository;
-use Eccube\Repository\PageRepository;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthConfig;
 use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthType;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class PluginManager.
@@ -60,7 +57,16 @@ class PluginManager extends AbstractPluginManager
      */
     public function disable(array $meta, ContainerInterface $container)
     {
+        $em = $container->get('doctrine')->getManager();
 
+        // ２段階認証設定を消す
+        $this->removeConfig($em);
+
+        // twigファイルを削除
+        $this->removeTwigFiles($container);
+
+        // ページ削除
+        $this->removePages($em);
     }
 
     /**
@@ -71,6 +77,9 @@ class PluginManager extends AbstractPluginManager
     {
         $em = $container->get('doctrine')->getManager();
 
+        // ２段階認証設定を消す
+        $this->removeConfig($em);
+
         // twigファイルを削除
         $this->removeTwigFiles($container);
 
@@ -80,7 +89,7 @@ class PluginManager extends AbstractPluginManager
 
     /**
      * Twigファイルの登録
-     * 
+     *
      * @param ContainerInterface $container
      */
     protected function copyTwigFiles(ContainerInterface $container)
@@ -96,9 +105,9 @@ class PluginManager extends AbstractPluginManager
         $fs->mirror(__DIR__.'/Resource/template/default', $templatePath);
     }
 
-    /** 
+    /**
      * ページ情報の登録
-     * 
+     *
      * @param EntityManagerInterface $em
      */
     protected function createPages(EntityManagerInterface $em)
@@ -113,10 +122,10 @@ class PluginManager extends AbstractPluginManager
                 $Page->setName($p[1]);
                 $Page->setFileName($p[2]);
                 $Page->setMetaRobots('noindex');
-    
+
                 $em->persist($Page);
                 $em->flush();
-    
+
                 $Layout = $em->getRepository(Layout::class)->find(Layout::DEFAULT_LAYOUT_UNDERLAYER_PAGE);
                 $PageLayout = new PageLayout();
                 $PageLayout->setPage($Page)
@@ -132,7 +141,7 @@ class PluginManager extends AbstractPluginManager
 
     /**
      * Twigファイルの削除
-     * 
+     *
      * @param ContainerInterface $container
      */
     protected function removeTwigFiles(ContainerInterface $container)
@@ -143,9 +152,9 @@ class PluginManager extends AbstractPluginManager
         $fs->remove($templatePath);
     }
 
-    /** 
+    /**
      * ページ情報の削除
-     * 
+     *
      * @param EntityManagerInterface $em
      */
     protected function removePages(EntityManagerInterface $em)
@@ -170,7 +179,8 @@ class PluginManager extends AbstractPluginManager
      */
     protected function createConfig(EntityManagerInterface $em)
     {
-        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findBy([ 'name' => 'APP' ]);
+        /** @var TwoFactorAuthType $TwoFactorAuthType */
+        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findOneBy(['name' => 'APP']);
         if (!$TwoFactorAuthType) {
             // レコードを保存
             $TwoFactorAuthType = new TwoFactorAuthType();
@@ -179,19 +189,43 @@ class PluginManager extends AbstractPluginManager
                 ->setName('APP')
                 ->setRoute('plg_customer_2fa_app_create')
             ;
-
-            $em->persist($TwoFactorAuthType);
+        } else {
+            // 無効の状態から有効に変更する
+            $TwoFactorAuthType->setIsDisabled(false);
         }
+        $em->persist($TwoFactorAuthType);
 
         // 除外ルートの登録
         $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
-        foreach ($this->pages as $p) {
-            $TwoFactorAuthConfig->addExcludeRoute($p[0]);
-        }
         $em->persist($TwoFactorAuthConfig);
         $em->flush();
 
         return;
-    }    
+    }
 
+    /**
+     * ２段階認証設定を消す
+     *
+     * @param EntityManagerInterface $em
+     * @return void
+     */
+    protected function removeConfig(EntityManagerInterface $em)
+    {
+        /** @var TwoFactorAuthType|null $TwoFactorAuthType */
+        $TwoFactorAuthType = $em->getRepository(TwoFactorAuthType::class)->findOneBy(['name' => 'APP']);
+
+        // APPオプションがあれば、そのオプションを無効にする
+        if (!empty($TwoFactorAuthType)) {
+            $TwoFactorAuthType->setIsDisabled(true);
+            $em->persist($TwoFactorAuthType);
+        }
+
+        // 除外ルートの削除
+        $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
+        foreach ($this->pages as $page) {
+            $TwoFactorAuthConfig->removeExcludeRoute($page[0]);
+        }
+        $em->persist($TwoFactorAuthConfig);
+        $em->flush();
+    }
 }
