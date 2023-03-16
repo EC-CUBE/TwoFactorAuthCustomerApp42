@@ -30,8 +30,8 @@ class PluginManager extends AbstractPluginManager
 {
     // 設定対象ページ情報
     private $pages = [
-        ['plg_customer_2fa_app_create', 'アプリ認証初期設定・トークン入力', 'TwoFactorAuthCustomer42/Resource/template/default/tfa/app/register'],
-        ['plg_customer_2fa_app_challenge', 'アプリ認証トークン入力', 'TwoFactorAuthCustomer42/Resource/template/default/tfa/app/challenge'],
+        ['plg_customer_2fa_app_create', 'アプリ認証初期設定・トークン入力', 'TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/register'],
+        ['plg_customer_2fa_app_challenge', 'アプリ認証トークン入力', 'TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/challenge'],
     ];
 
     /**
