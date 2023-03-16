@@ -161,7 +161,7 @@ class PluginManager extends AbstractPluginManager
     {
         foreach ($this->pages as $p) {
             $Page = $em->getRepository(Page::class)->findOneBy(['url' => $p[0]]);
-            if (!$Page) {
+            if (!empty($Page)) {
                 $Layout = $em->getRepository(Layout::class)->find(Layout::DEFAULT_LAYOUT_UNDERLAYER_PAGE);
                 $PageLayout = $em->getRepository(PageLayout::class)->findOneBy(['Page' => $Page, 'Layout' => $Layout]);
 
@@ -218,14 +218,7 @@ class PluginManager extends AbstractPluginManager
         if (!empty($TwoFactorAuthType)) {
             $TwoFactorAuthType->setIsDisabled(true);
             $em->persist($TwoFactorAuthType);
+            $em->flush();
         }
-
-        // 除外ルートの削除
-        $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
-        foreach ($this->pages as $page) {
-            $TwoFactorAuthConfig->removeExcludeRoute($page[0]);
-        }
-        $em->persist($TwoFactorAuthConfig);
-        $em->flush();
     }
 }
