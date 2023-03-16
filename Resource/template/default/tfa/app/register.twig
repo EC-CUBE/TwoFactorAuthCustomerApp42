@@ -12,6 +12,24 @@ file that was distributed with this source code.
 
 {% set body_class = 'mypage' %}
 
+{% block stylesheet %}
+<style>
+.ec-login-header {
+    background: #FFFFFF;
+}
+.ec-login-header > p {
+    text-align: center;
+    font: var(--unnamed-font-style-normal) normal medium 16px/22px YuGothic;
+    letter-spacing: var(--unnamed-character-spacing-0);
+    text-align: center;
+    font: normal normal medium 16px/22px YuGothic;
+    letter-spacing: 0px;
+    color: #525263;
+    opacity: 1;
+}
+</style>
+{% endblock %}
+
 {% block javascript %}
 {% if Customer.TwoFactorAuthType == null or Customer.two_factor_auth_secret == null %}
 {# TODO: フロント側バンドルにもqrcodeが欲しい #}
@@ -19,7 +37,7 @@ file that was distributed with this source code.
 <script>
     $(function () {
     $("#qrcode").qrcode({
-        size: 200,
+        size: 150,
         fill: '#000',
         text: 'otpauth://totp/{{ 'EC-CUBE:'|url_encode }}{{ BaseInfo.shop_name|url_encode }}{{ ' - '|url_encode }}{{ Customer.name01|url_encode }}?secret={{ auth_key }}&issuer={{ 'EC-CUBE'|url_encode }}',
         radius: 0,
@@ -53,14 +71,16 @@ file that was distributed with this source code.
                 <form name="form1" id="form1" method="post" action="{{ path('plg_customer_2fa_app_create') }}">
                     {{ form_widget(form._token) }}
                     {{ form_widget(form.auth_key) }}
+                    <div class="ec-login ec-login-header">
+                        <p>{{ 'front.2fa.app.qr_code'|trans|nl2br }}</p>
+                    </div>
                     <div class="ec-login">
                         <div class="ec-login__icon">
                             <div id="qrcode" class="ec-icon"></div>
                         </div>
-                        <p>{{ 'front.2fa.app.qr_code'|trans }}</p>
                         <div class="ec-login__input">
                             <div class="ec-input">
-                                {{ form_widget(form.one_time_token, {'attr': {'class':'w-100','placeholder': 'admin.setting.system.two_factor_auth.device_token', 'autofocus': true}}) }}
+                                {{ form_widget(form.one_time_token, {'attr': {'class':'w-100','placeholder': 'front.2fa.app.place_holder', 'autofocus': true}}) }}
                             </div>
                             {% if error %}
                                 <p class="ec-errorMessage">{{ error|nl2br }}</p>
@@ -68,17 +88,19 @@ file that was distributed with this source code.
                         </div>
                         <div class="ec-login__input">
                             <button type="submit"
-                                    class="ec-blockBtn--cancel">{{ 'front.2fa.auth'|trans }}</button>
+                                    class="ec-blockBtn--cancel">{{ 'front.2fa.app.send_code'|trans }}</button>
                         </div>
                     </div>
                 </form>
                 {% else %}
                     <form name="form1" id="form1" method="get" action="{{ path('plg_customer_2fa_app_challenge') }}">
+                        <div class="ec-login ec-login-header">
+                            <p>{{ 'front.2fa.app.qr_code'|trans|nl2br }}</p>
+                        </div>
                         <div class="ec-login">
                             <div class="ec-login__icon">
                                 <div class="ec-icon"><img src="{{ asset('assets/icon/user.svg') }}" alt=""></div>
                             </div>
-                            <p>{{ 'front.2fa.app.ready'|trans }}</p>
                             <div class="ec-login__input">
                                 <button type="submit"
                                         class="ec-blockBtn--cancel">{{ 'front.2fa.auth'|trans }}</button>
