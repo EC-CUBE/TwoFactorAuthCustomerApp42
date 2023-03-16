@@ -220,12 +220,6 @@ class PluginManager extends AbstractPluginManager
             $em->persist($TwoFactorAuthType);
         }
 
-        // 除外ルートの削除
-        $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
-        foreach ($this->pages as $page) {
-            $TwoFactorAuthConfig->removeExcludeRoute($page[0]);
-        }
-        $em->persist($TwoFactorAuthConfig);
         $em->flush();
     }
 }
