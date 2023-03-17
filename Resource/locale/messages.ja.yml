@@ -1,6 +1,13 @@
 admin.customer.2fa.app.title: アプリ認証情報
 admin.customer.2fa.app.secret_key: 秘密鍵
-
-front.2fa.app.qr_code: QRコードを2段階認証用スマートフォンアプリで読み込み、表示された6桁の数字を入力してください。
-front.2fa.app.ready: 2段階認証用スマートフォンアプリを立ち上げ、[認証]をクリックしてください。
-front.2fa.app.input: 2段階認証用スマートフォンアプリに表示されている6桁の数字を入力してください。
+front.2fa.app.place_holder: 登録コード
+front.2fa.app.send_code: 登録コードを送信
+front.2fa.app.qr_code: |
+  QRコードを二段階認証用スマートフォンアプリで読み込み、
+  表示された6桁の数字を入力してください。
+front.2fa.app.ready: |
+  二段階認証用スマートフォンアプリを立ち上げ、
+  [認証]をクリックしてください。
+front.2fa.app.input: |
+  二段階認証用スマートフォンアプリに表示されている
+  6桁の数字をご入力ください。
