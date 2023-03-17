@@ -1,6 +1,6 @@
 {
   "name": "ec-cube/twofactorauthcustomerapp42",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "2 factor authentication for Customers(APP) EC-CUBE42",
   "type": "eccube-plugin",
   "extra": {
