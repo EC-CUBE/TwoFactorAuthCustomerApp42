@@ -17,6 +17,7 @@ use Eccube\Entity\Customer;
 use Plugin\TwoFactorAuthCustomer42\Controller\TwoFactorAuthCustomerController;
 use Plugin\TwoFactorAuthCustomerApp42\Form\Type\TwoFactorAuthAppTypeCustomer;
 use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\TwoFactorAuthException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -154,6 +155,19 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
         ];
     }
 
+
+    /**
+     * 秘密鍵生成.
+     *
+     * @return string
+     *
+     * @throws TwoFactorAuthException
+     */
+    private function createSecret()
+    {
+        return $this->tfa->createSecret();
+    }
+
     /**
      * 認証コードを取得.
      *
@@ -165,15 +179,5 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
     private function verifyCode($authKey, $token)
     {
         return $this->tfa->verifyCode($authKey, $token, 2);
-    }
-
-    /**
-     * 秘密鍵生成.
-     *
-     * @return string
-     */
-    private function createSecret()
-    {
-        return $this->tfa->createSecret();
     }
 }

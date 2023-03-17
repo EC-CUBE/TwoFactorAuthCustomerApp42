@@ -1,15 +1,25 @@
 <?php
 
+/*
+ * This file is part of EC-CUBE
+ *
+ * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+ *
+ * http://www.ec-cube.co.jp/
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Plugin\TwoFactorAuthCustomerApp42\Form\Type\Extension\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Form\Type\Admin\CustomerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthType;
 
 class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
 {
@@ -25,8 +35,7 @@ class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
      */
     public function __construct(
         EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
     }
 
@@ -34,7 +43,7 @@ class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
      * buildForm.
      *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -46,8 +55,7 @@ class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
             $form = $event->getForm();
             $form->add('two_factor_auth_secret', TextType::class, [
                 'required' => false,
-            ])
-            ;
+            ]);
         });
     }
 

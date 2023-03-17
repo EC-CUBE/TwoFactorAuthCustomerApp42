@@ -187,8 +187,7 @@ class PluginManager extends AbstractPluginManager
 
             $TwoFactorAuthType
                 ->setName('APP')
-                ->setRoute('plg_customer_2fa_app_create')
-            ;
+                ->setRoute('plg_customer_2fa_app_create');
         } else {
             // 無効の状態から有効に変更する
             $TwoFactorAuthType->setIsDisabled(false);
@@ -207,6 +206,7 @@ class PluginManager extends AbstractPluginManager
      * ２段階認証設定を消す
      *
      * @param EntityManagerInterface $em
+     *
      * @return void
      */
     protected function removeConfig(EntityManagerInterface $em)
