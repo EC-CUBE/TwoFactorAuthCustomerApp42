@@ -13,21 +13,22 @@ file that was distributed with this source code.
 {% set body_class = 'mypage' %}
 
 {% block stylesheet %}
-<style>
-.ec-login-header {
-    background: #FFFFFF;
-}
-.ec-login-header > p {
-    text-align: center;
-    font: var(--unnamed-font-style-normal) normal medium 16px/22px YuGothic;
-    letter-spacing: var(--unnamed-character-spacing-0);
-    text-align: center;
-    font: normal normal medium 16px/22px YuGothic;
-    letter-spacing: 0px;
-    color: #525263;
-    opacity: 1;
-}
-</style>
+    <style>
+        .ec-login-header {
+            background: #FFFFFF;
+        }
+
+        .ec-login-header > p {
+            text-align: center;
+            font: var(--unnamed-font-style-normal) normal medium 16px/22px YuGothic;
+            letter-spacing: var(--unnamed-character-spacing-0);
+            text-align: center;
+            font: normal normal medium 16px/22px YuGothic;
+            letter-spacing: 0px;
+            color: #525263;
+            opacity: 1;
+        }
+    </style>
 {% endblock %}
 
 {% block javascript %}
@@ -58,7 +59,9 @@ file that was distributed with this source code.
 
 {% block main %}
     <style>
-        #qrcode canvas { width: 150px; }
+        #qrcode canvas {
+            width: 150px;
+        }
     </style>
 
     <div class="ec-role">
@@ -68,30 +71,30 @@ file that was distributed with this source code.
         <div class="ec-off2Grid">
             <div class="ec-off2Grid__cell">
                 {% if Customer.TwoFactorAuthType == false or Customer.two_factor_auth_secret == null %}
-                <form name="form1" id="form1" method="post" action="{{ path('plg_customer_2fa_app_create') }}">
-                    {{ form_widget(form._token) }}
-                    {{ form_widget(form.auth_key) }}
-                    <div class="ec-login ec-login-header">
-                        <p>{{ 'front.2fa.app.qr_code'|trans|nl2br }}</p>
-                    </div>
-                    <div class="ec-login">
-                        <div class="ec-login__icon">
-                            <div id="qrcode" class="ec-icon"></div>
+                    <form name="form1" id="form1" method="post" action="{{ path('plg_customer_2fa_app_create') }}">
+                        {{ form_widget(form._token) }}
+                        {{ form_widget(form.auth_key) }}
+                        <div class="ec-login ec-login-header">
+                            <p>{{ 'front.2fa.app.qr_code'|trans|nl2br }}</p>
                         </div>
-                        <div class="ec-login__input">
-                            <div class="ec-input">
-                                {{ form_widget(form.one_time_token, {'attr': {'class':'w-100','placeholder': 'front.2fa.app.place_holder', 'autofocus': true}}) }}
+                        <div class="ec-login">
+                            <div class="ec-login__icon">
+                                <div id="qrcode" class="ec-icon"></div>
                             </div>
-                            {% if error %}
-                                <p class="ec-errorMessage">{{ error|nl2br }}</p>
-                            {% endif %}
+                            <div class="ec-login__input">
+                                <div class="ec-input">
+                                    {{ form_widget(form.one_time_token, {'attr': {'class':'w-100','placeholder': 'front.2fa.app.place_holder', 'autofocus': true}}) }}
+                                </div>
+                                {% if error %}
+                                    <p class="ec-errorMessage">{{ error|nl2br }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="ec-login__input">
+                                <button type="submit"
+                                        class="ec-blockBtn--cancel">{{ 'front.2fa.app.send_code'|trans }}</button>
+                            </div>
                         </div>
-                        <div class="ec-login__input">
-                            <button type="submit"
-                                    class="ec-blockBtn--cancel">{{ 'front.2fa.app.send_code'|trans }}</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
                 {% else %}
                     <form name="form1" id="form1" method="get" action="{{ path('plg_customer_2fa_app_challenge') }}">
                         <div class="ec-login ec-login-header">
