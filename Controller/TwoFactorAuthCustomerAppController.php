@@ -37,13 +37,12 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
     /**
      * 初回APP認証画面.
      *
-     * @Route("/two_factor_auth/app/create", name="plg_customer_2fa_app_create", methods={"GET", "POST"})
+     * @Route("/mypage/two_factor_auth/app/create", name="plg_customer_2fa_app_create", methods={"GET", "POST"})
      * @Template("TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/register.twig")
      */
     public function create(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
-            // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }
 
@@ -109,13 +108,12 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
     /**
      * APP認証画面.
      *
-     * @Route("/two_factor_auth/app/challenge", name="plg_customer_2fa_app_challenge", methods={"GET", "POST"})
+     * @Route("/mypage/two_factor_auth/app/challenge", name="plg_customer_2fa_app_challenge", methods={"GET", "POST"})
      * @Template("TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/challenge.twig")
      */
     public function challenge(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
-            // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }
 
