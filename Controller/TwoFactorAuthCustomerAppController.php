@@ -25,6 +25,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
 {
     /**
+     * @var string 設定用認証キーを保存するセッションキー名
+     */
+    protected const SESSION_APP_AUTH_KEY = 'plugin_eccube_customer_2fa_app_auth_key';
+
+    /**
      * @var TwoFactorAuth
      */
     protected $tfa;
@@ -32,13 +37,12 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
     /**
      * 初回APP認証画面.
      *
-     * @Route("/two_factor_auth/app/create", name="plg_customer_2fa_app_create", methods={"GET", "POST"})
+     * @Route("/mypage/two_factor_auth/app/create", name="plg_customer_2fa_app_create", methods={"GET", "POST"})
      * @Template("TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/register.twig")
      */
     public function create(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
-            // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }
 
@@ -61,13 +65,13 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
                 ];
             }
             $auth_key = $this->createSecret();
-            $builder->get('auth_key')->setData($auth_key);
+            $this->session->set(self::SESSION_APP_AUTH_KEY, $auth_key);
             $form = $builder->getForm();
         } elseif ('POST' === $request->getMethod()) {
             $form = $builder->getForm();
             $form->handleRequest($request);
+            $auth_key = $this->session->get(self::SESSION_APP_AUTH_KEY);
             if ($form->isSubmitted() && $form->isValid()) {
-                $auth_key = $form->get('auth_key')->getData();
                 $token = $form->get('one_time_token')->getData();
                 if ($this->verifyCode($auth_key, $token)) {
                     // 秘密鍵更新
@@ -75,6 +79,7 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
                     $this->entityManager->persist($Customer);
                     $this->entityManager->flush();
                     $this->addSuccess('front.2fa.complete_message');
+                    $this->session->remove(self::SESSION_APP_AUTH_KEY);
 
                     $response = $this->redirectToRoute($this->getCallbackRoute());
                     $response->headers->setCookie(
@@ -103,13 +108,12 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
     /**
      * APP認証画面.
      *
-     * @Route("/two_factor_auth/app/challenge", name="plg_customer_2fa_app_challenge", methods={"GET", "POST"})
+     * @Route("/mypage/two_factor_auth/app/challenge", name="plg_customer_2fa_app_challenge", methods={"GET", "POST"})
      * @Template("TwoFactorAuthCustomerApp42/Resource/template/default/tfa/app/challenge.twig")
      */
     public function challenge(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
-            // 認証済み
             return $this->redirectToRoute($this->getCallbackRoute());
         }
 
