@@ -76,7 +76,7 @@ file that was distributed with this source code.
 
     $(document).ready(function(){
         $("#copy_auth_key").click(() =>{
-            navigator.clipboard.writeText('{{ auth_key }}');
+            navigator.clipboard.writeText('{{ auth_key|escape('js') }}');
             alert("キーをコピーしました。!");
         });
     });
