@@ -61,7 +61,7 @@ file that was distributed with this source code.
     $("#qrcode").qrcode({
         size: 150,
         fill: '#000',
-        text: 'otpauth://totp/{{ 'EC-CUBE:'|url_encode }}{{ BaseInfo.shop_name|url_encode }}{{ ' - '|url_encode }}{{ Customer.name01|url_encode }}?secret={{ auth_key }}&issuer={{ 'EC-CUBE'|url_encode }}',
+        text: 'otpauth://totp/{{ 'EC-CUBE:'|url_encode }}{{ BaseInfo.shop_name|url_encode }}{{ ' - '|url_encode }}{{ Customer.name01|url_encode }}?secret={{ auth_key|escape('js') }}&issuer={{ 'EC-CUBE'|url_encode }}',
         radius: 0,
         quiet: 0,
         mode: 0, // 0: normal , 1: label strip , 2: label box , 3: image strip , 4: image box
