@@ -77,8 +77,11 @@ file that was distributed with this source code.
     $(document).ready(function(){
         $("#copy_auth_key").click(() =>{
             navigator.clipboard.writeText('{{ auth_key|escape('js') }}');
-            alert("キーをコピーしました。!");
+            $('.ec-modal').show();
         });
+    });
+    $('.ec-modal-overlay, .ec-modal, .ec-modal-close, .ec-inlineBtn--cancel').on('click', function() {
+        $('.ec-modal').hide()
     });
     });
 </script>
@@ -126,6 +129,19 @@ file that was distributed with this source code.
                         <div class="ec-login__input">
                             <button type="submit"
                                     class="ec-blockBtn--cancel">{{ 'front.2fa.app.send_code'|trans }}</button>
+                        </div>
+                    </div>
+                    <div class="ec-modal">
+                        <div class="ec-modal-overlay">
+                            <div class="ec-modal-wrap">
+                                <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                                <div id="ec-modal-header" class="text-center">{{ 'キーをコピーしました。'|trans }}</div>
+                                <div class="ec-modal-box">
+                                    <div class="ec-role">
+                                        <span class="ec-inlineBtn--cancel">{{ '閉じる'|trans }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
