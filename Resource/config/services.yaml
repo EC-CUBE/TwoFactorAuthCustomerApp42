@@ -1,6 +1,6 @@
 eccube:
   rate_limiter:
-    app_create_request:
+    plg_customer_2fa_app_create:
       # 実行するルーティングを指定します。
       route: plg_customer_2fa_app_create
       # 実行するmethodを指定します。デフォルトはPOSTです。
