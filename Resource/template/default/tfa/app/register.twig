@@ -19,8 +19,9 @@ file that was distributed with this source code.
         }
 
         .ec-login {
-            padding: 30px 7% 36px;
+            padding: 30px 4% 36px;
         }
+
         .ec-login-header {
             background: #FFFFFF;
         }
@@ -50,6 +51,22 @@ file that was distributed with this source code.
             text-align: center;
             display: block;
         }
+
+        .ec-grid2 {
+            padding-top: 10px;
+        }
+
+        .app_input_key {
+            padding-top: 10px;
+        }
+
+        .ec-grid2__cell:last-of-type {
+            background-color: #ffffff;
+            padding: 10px 10px 10px;
+        }
+        .ec-login-header>p:last-of-type {
+            padding-top: 10px;
+        }
     </style>
 {% endblock %}
 
@@ -61,7 +78,7 @@ file that was distributed with this source code.
     $("#qrcode").qrcode({
         size: 150,
         fill: '#000',
-        text: 'otpauth://totp/{{ 'EC-CUBE:'|url_encode }}{{ BaseInfo.shop_name|url_encode }}{{ ' - '|url_encode }}{{ Customer.name01|url_encode }}?secret={{ auth_key }}&issuer={{ 'EC-CUBE'|url_encode }}',
+        text: 'otpauth://totp/{{ 'EC-CUBE:'|url_encode }}{{ BaseInfo.shop_name|url_encode }}{{ ' - '|url_encode }}{{ Customer.name01|url_encode }}?secret={{ auth_key|escape('js') }}&issuer={{ 'EC-CUBE'|url_encode }}',
         radius: 0,
         quiet: 0,
         mode: 0, // 0: normal , 1: label strip , 2: label box , 3: image strip , 4: image box
@@ -76,7 +93,7 @@ file that was distributed with this source code.
 
     $(document).ready(function(){
         $("#copy_auth_key").click(() =>{
-            navigator.clipboard.writeText('{{ auth_key }}');
+            navigator.clipboard.writeText('{{ auth_key|escape('js') }}');
             alert("キーをコピーしました。!");
         });
     });
@@ -97,25 +114,32 @@ file that was distributed with this source code.
                     {{ form_widget(form._token) }}
                     <div class="ec-login ec-login-header">
                         <p>{{ 'front.2fa.app.qr_code'|trans|nl2br }}</p>
+                        <p>モバイル端末の認証アプリ（以下のいずれかのアプリ）に認証コードが表示されます。<br>
+                            iOS / Android<br>
+                            Google Authenticator / Authy / IIJ SmartKey</p>
                     </div>
                     <div class="ec-login">
-                        <div class="ec-login__icon">
-                            <div id="qrcode" class="ec-icon"></div>
-                        </div>
-                        <div class="ec-login__input">
-                            <div class="ec-input">
-                                <p class="app_auth_title">QRコードをスキャンできない場合</p>
-                                <p class="app_auth_line">1.以下のキーをコピーし、二段階認証アプリの[キー]枠に入力してください。</p>
-                                <p class="app_auth_line">2.二段階認証アプリに表示されているコードを入力してください。</p>
+                        <div class="ec-grid2">
+                            <div class="ec-grid2__cell">
+                                <div class="ec-login__icon">
+                                    <div id="qrcode" class="ec-icon"></div>
+                                </div>
                             </div>
-                            <div class="ec-input">
-                                <div class="app_auth_key">
-                                    <p>{{ auth_key }}</p>
-                                    <a href="javascript:void(0);" id="copy_auth_key">[キーをコピー]</a>
+                            <div class="ec-grid2__cell">
+                                <div class="ec-input">
+                                    <p class="app_auth_title">QRコードをスキャンできない場合</p>
+                                    <p class="app_auth_line"><b>1.</b> 以下のキーをコピーし、二段階認証アプリの[キー]枠に入力してください。</p>
+                                    <p class="app_auth_line"><b>2.</b> 二段階認証アプリに表示されているコードを入力してください。</p>
+                                </div>
+                                <div class="ec-input">
+                                    <div class="app_auth_key">
+                                        <p>{{ auth_key }}</p>
+                                        <a href="javascript:void(0);" id="copy_auth_key">[キーをコピー]</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="ec-login__input">
+                        <div class="ec-login__input app_input_key">
                             <div class="ec-input">
                                 {{ form_widget(form.one_time_token, {'attr': {'class':'w-100','placeholder': 'front.2fa.app.place_holder', 'autofocus': true}}) }}
                             </div>
