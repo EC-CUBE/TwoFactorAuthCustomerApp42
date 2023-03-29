@@ -182,6 +182,6 @@ class TwoFactorAuthCustomerAppController extends TwoFactorAuthCustomerController
      */
     private function verifyCode($authKey, $token)
     {
-        return $this->tfa->verifyCode($authKey, $token, 2);
+        return $this->tfa->verifyCode($authKey, $token, 1);
     }
 }
