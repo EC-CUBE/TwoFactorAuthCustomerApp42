@@ -1,6 +1,6 @@
 eccube:
   rate_limiter:
-    app_create_request:
+    plg_customer_2fa_app_create:
       # 実行するルーティングを指定します。
       route: plg_customer_2fa_app_create
       # 実行するmethodを指定します。デフォルトはPOSTです。
@@ -11,7 +11,7 @@ eccube:
       limit: 5
       # インターバルを設定します。
       interval: '30 minutes'
-    app_challenge_request:
+    plg_customer_2fa_app_challenge:
       # 実行するルーティングを指定します。
       route: plg_customer_2fa_app_challenge
       # 実行するmethodを指定します。デフォルトはPOSTです。
